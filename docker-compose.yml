@@ -1,0 +1,21 @@
+version: '2'
+services:
+  app:
+    build: .
+    command: bundle exec puma -C config/puma.rb
+    volumes:
+      - /var/www/sample_rails_docker_app
+    depends_on:
+      - db
+    expose:
+      - "3000"
+  db:
+    image: postgres:9.4.5
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile-nginx
+    depends_on:
+      - app
+    ports:
+      - "80:80"
